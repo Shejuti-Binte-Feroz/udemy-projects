@@ -1,11 +1,15 @@
 import Header from "./components/Header.jsx";
 import Footer from "./components/footer/Footer.jsx";
+import React from "react";
+import Home from "./components/Home.jsx";
+
 function App() {
     return (
-        <div>
+        <React.Fragment>
             <Header />
+            <Home />
             <Footer />
-        </div>
+        </React.Fragment>
     );
 }
 export default App
