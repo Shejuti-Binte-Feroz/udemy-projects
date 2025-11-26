@@ -1,0 +1,25 @@
+package com.eazybytes.beans;
+
+import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Engine {
+
+    public Engine() {
+        System.out.println("Engine Bean Has Been Created");
+    }
+
+    private String name;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @PostConstruct
+    public void initialize() {
+        this.name = "V8";
+    }
+}
