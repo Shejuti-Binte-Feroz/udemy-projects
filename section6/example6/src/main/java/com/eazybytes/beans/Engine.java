@@ -22,4 +22,11 @@ public class Engine {
     public void initialize() {
         this.name = "V8";
     }
+
+    @Override
+    public String toString() {
+        return "Engine{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

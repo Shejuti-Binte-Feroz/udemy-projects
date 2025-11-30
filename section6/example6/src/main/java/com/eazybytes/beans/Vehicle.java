@@ -8,18 +8,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class Vehicle {
 
-    public Vehicle() {
-        System.out.println("Vehicle Bean Has Been Created");
-    }
+//    public Vehicle() {
+//        System.out.println("Vehicle Bean Has Been Created");
+//    }
 
     private String name;
 
+    private final Engine engine;
+
     @Autowired
-    private Engine engine;
+    public Vehicle(Engine engine) {
+        this.engine = engine;
+        System.out.println("Vehicle Bean Has Been Created");
+    }
 
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -28,9 +34,10 @@ public class Vehicle {
         return engine;
     }
 
-    public void setEngine(Engine engine) {
-        this.engine = engine;
-    }
+//    @Autowired
+//    public void setEngine(Engine engine) {
+//        this.engine = engine;
+//    }
 
     public void sayHello(){
         System.out.println("Printing Hello From Component Engine Bean");
