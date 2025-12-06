@@ -1,6 +1,7 @@
 package com.eazybytes.eazystore.controller;
 
 
+import com.eazybytes.eazystore.dto.ProductDto;
 import com.eazybytes.eazystore.entity.Product;
 import com.eazybytes.eazystore.repository.ProductRepository;
 import com.eazybytes.eazystore.service.IProductService;
@@ -20,8 +21,8 @@ public class ProductController {
     private final IProductService iProductService;
 
     @GetMapping
-    public List<Product> getProducts() {
-        List<Product> productList=iProductService.getProducts();
+    public List<ProductDto> getProducts() {
+        List<ProductDto> productList=iProductService.getProducts();
         return productList;
         //H2 DB
     }

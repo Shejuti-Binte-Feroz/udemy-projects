@@ -5,9 +5,11 @@ import com.eazybytes.eazystore.entity.Product;
 import com.eazybytes.eazystore.repository.ProductRepository;
 import com.eazybytes.eazystore.service.IProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,13 +18,16 @@ public class ProductServiceImpl implements IProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<Product> getProducts()
+    public List<ProductDto> getProducts()
     {
-        return productRepository.findAll();
+        return productRepository.findAll().stream().map(this::transformToDto).collect(Collectors.toList());
     }
 
     private ProductDto transformToDto(Product product)
     {
         ProductDto productDto = new ProductDto();
+//        productDto.setId(product.getId());
+        BeanUtils.copyProperties(product, productDto);
+        return productDto;
     }
 }
