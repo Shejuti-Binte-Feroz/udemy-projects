@@ -1,0 +1,71 @@
+# ------------------------------------
+# Java / Spring Boot Standard Gitignore
+# ------------------------------------
+
+# Build output
+target/
+build/
+out/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.js
+.mvn/wrapper/
+!mvnw
+!mvnw.cmd
+
+# Gradle
+.gradle/
+**/build/
+!gradlew
+!gradlew.bat
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+logs/
+log/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Spring Boot specific
+application-*.yml
+application-*.yaml
+application-*.properties
+!application-example.properties
+!application-example.yml
+
+# H2 database files (important!)
+*.mv.db
+*.lock.db
+
+# Local environment stuff
+.env
+*.env
+
+# Java-specific
+*.class
+*.jar
+*.war
+*.ear
+
+# Temporary files
+*.tmp
+*.temp
+
+# Node/npm (if you have frontend)
+node_modules/
+
+# Caches
+.cache/
