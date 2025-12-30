@@ -13,6 +13,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <div>Oops! Page not found.</div>,
     children: [
       {
         index: true,

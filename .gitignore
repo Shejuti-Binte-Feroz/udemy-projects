@@ -55,9 +55,7 @@ application-*.properties
 *.mv.db
 *.lock.db
 
-# Local environment stuff
-.env
-*.env
+
 
 # Java-specific
 *.class
