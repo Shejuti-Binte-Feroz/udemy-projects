@@ -1,7 +1,6 @@
 package com.eazybytes.eazystore.repository;
 
-import com.eazybytes.eazystore.Contact;
-import com.eazybytes.eazystore.entity.Product;
+import com.eazybytes.eazystore.entity.Contact;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

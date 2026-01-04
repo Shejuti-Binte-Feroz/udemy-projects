@@ -8,11 +8,8 @@ export default function Cart() {
   const navigation = useNavigate();
 
   const handleClick = () => {
-<<<<<<< Updated upstream
     navigation("/home", { state: { username: "madan" } });
-=======
     navigation("/home", { state: { username: "shejuti" } });
->>>>>>> Stashed changes
   };
 
   return (
@@ -20,11 +17,7 @@ export default function Cart() {
       <div className="max-w-4xl mx-auto px-4">
         <PageTitle title="Your Cart" />
         <div className="text-center text-gray-600 dark:text-lighter flex flex-col items-center">
-<<<<<<< Updated upstream
-          <p className="max-w-[576px] px-2 mx-auto text-base mb-4">
-=======
           <p className="max-w-xl px-2 mx-auto text-base mb-4">
->>>>>>> Stashed changes
             Oops... Your cart is empty. Continue shopping
           </p>
           <img
@@ -42,8 +35,4 @@ export default function Cart() {
       </div>
     </div>
   );
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes

@@ -1,4 +1,4 @@
-package com.eazybytes.eazystore;
+package com.eazybytes.eazystore.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "contact", schema = "eazystore")
+@Table(name = "contacts")
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
