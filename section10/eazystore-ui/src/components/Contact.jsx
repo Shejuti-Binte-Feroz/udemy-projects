@@ -39,6 +39,7 @@ export default function Contact() {
   const textFieldStyle =
     "w-full px-4 py-2 text-base border rounded-md transition border-primary dark:border-light focus:ring focus:ring-dark dark:focus:ring-lighter focus:outline-none text-gray-800 dark:text-lighter bg-white dark:bg-gray-600 placeholder-gray-400 dark:placeholder-gray-300";
   return (
+<<<<<<< Updated upstream
     <div className="max-w-[1152px] min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
       {/* Page Title */}
       <PageTitle title="Contact Us" />
@@ -46,6 +47,15 @@ export default function Contact() {
       <p className="max-w-[768px] mx-auto mt-8 text-gray-600 dark:text-lighter mb-8 text-center">
         We’d love to hear from you! If you have any questions, feedback, or
         suggestions, please don’t hesitate to reach out.
+=======
+    <div className="max-w-6xl min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
+      {/* Page Title */}
+      <PageTitle title="Contact Us" />
+      {/* Contact Info */}
+      <p className="max-w-3xl mx-auto mt-8 text-gray-600 dark:text-lighter mb-8 text-center">
+        We'd love to hear from you! If you have any questions, feedback, or
+        suggestions, please don't hesitate to reach out.
+>>>>>>> Stashed changes
       </p>
 
       {/* Contact Form */}
@@ -53,7 +63,11 @@ export default function Contact() {
         method="POST"
         ref={formRef}
         onSubmit={handleSubmit}
+<<<<<<< Updated upstream
         className="space-y-6 max-w-[768px] mx-auto"
+=======
+        className="space-y-6 max-w-3xl mx-auto"
+>>>>>>> Stashed changes
       >
         {/* Name Field */}
         <div>
@@ -99,7 +113,11 @@ export default function Contact() {
               name="mobileNumber"
               type="tel"
               required
+<<<<<<< Updated upstream
               pattern="^\d{11}$"
+=======
+              pattern="^\d{10}$"
+>>>>>>> Stashed changes
               title="Mobile number must be exactly 10 digits"
               placeholder="Your Mobile Number"
               className={textFieldStyle}
@@ -137,6 +155,30 @@ export default function Contact() {
       </Form>
     </div>
   );
+<<<<<<< Updated upstream
+}
+
+export async function contactAction({ request, params }) {
+  const data = await request.formData();
+
+  const contactData = {
+    name: data.get("name"),
+    email: data.get("email"),
+    mobileNumber: data.get("mobileNumber"),
+    message: data.get("message"),
+  };
+  try {
+    await apiClient.post("/contacts", contactData);
+    return { success: true };
+    // return redirect("/home");
+  } catch (error) {
+    throw new Response(
+      error.message || "Failed to submit your message. Please try again.",
+      { status: error.status || 500 }
+    );
+  }
+=======
+>>>>>>> Stashed changes
 }
 
 export async function contactAction({ request, params }) {
