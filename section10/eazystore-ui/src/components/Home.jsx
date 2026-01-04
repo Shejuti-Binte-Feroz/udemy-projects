@@ -27,8 +27,4 @@ export async function productsLoader() {
       { status: error.status || 500 }
     );
   }
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes

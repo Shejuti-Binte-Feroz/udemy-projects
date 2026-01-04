@@ -70,8 +70,4 @@ export default function Login() {
       </div>
     </div>
   );
-<<<<<<< Updated upstream
-}
-=======
-}
->>>>>>> Stashed changes
+
