@@ -15,7 +15,8 @@ export default function Contact() {
   const isSubmitting = navigation.state === "submitting";
   useEffect(() => {
     if (actionData?.success) {
-      formRef.current?.reset();f
+      formRef.current?.reset();
+      f;
       toast.success("Your message has been submitted successfully!");
     }
   }, [actionData]);
@@ -23,7 +24,7 @@ export default function Contact() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const userConfirmed = window.confirm(
-      "Are you sure you want to submit the form?"
+      "Are you sure you want to submit the form?",
     );
 
     if (userConfirmed) {
@@ -154,8 +155,10 @@ export async function contactAction({ request, params }) {
     // return redirect("/home");
   } catch (error) {
     throw new Response(
-      error.message || "Failed to submit your message. Please try again.",
-      { status: error.status || 500 }
+      error.response?.data?.errorMessage ||
+        error.message ||
+        "Failed to submit your message. Please try again.",
+      { status: error.status || 500 },
     );
   }
 }
