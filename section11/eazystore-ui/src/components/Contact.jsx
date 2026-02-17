@@ -71,6 +71,9 @@ export default function Contact() {
             minLength={5}
             maxLength={30}
           />
+          {actionData?.errors?.name && (
+            <p className="text-red-500 text-sm mt-1">{actionData.errors.name}</p>
+          )}
         </div>
 
         {/* Email and mobile Row */}
@@ -88,6 +91,9 @@ export default function Contact() {
               className={textFieldStyle}
               required
             />
+            {actionData?.errors?.email && (
+            <p className="text-red-500 text-sm mt-1">{actionData.errors.email}</p>
+          )}
           </div>
 
           {/* Mobile Field */}
@@ -100,11 +106,14 @@ export default function Contact() {
               name="mobileNumber"
               type="tel"
               required
-              pattern="^\d{11}$"
-              title="Mobile number must be exactly 10 digits"
+              pattern="^\d{12}$"
+              title="Mobile number must be exactly 12 digits"
               placeholder="Your Mobile Number"
               className={textFieldStyle}
             />
+            {actionData?.errors?.mobileNumber && (
+            <p className="text-red-500 text-sm mt-1">{actionData.errors.mobileNumber}</p>
+          )}
           </div>
         </div>
 
@@ -123,6 +132,9 @@ export default function Contact() {
             minLength={5}
             maxLength={500}
           ></textarea>
+          {actionData?.errors?.message && (
+            <p className="text-red-500 text-sm mt-1">{actionData.errors.message}</p>
+          )}
         </div>
 
         {/* Submit Button */}
@@ -154,6 +166,9 @@ export async function contactAction({ request, params }) {
     return { success: true };
     // return redirect("/home");
   } catch (error) {
+    if (error.response?.status === 400) {
+      return { success: false, error: error.response.data.errorMessage || "Invalid input. Please check your data and try again." }; 
+    }
     throw new Response(
       error.response?.data?.errorMessage ||
         error.message ||
