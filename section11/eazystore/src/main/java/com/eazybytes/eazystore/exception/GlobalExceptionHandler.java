@@ -2,6 +2,7 @@ package com.eazybytes.eazystore.exception;
 
 import com.eazybytes.eazystore.dto.ErrorResponseDto;
 import com.eazybytes.eazystore.dto.ProductDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,10 +18,12 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleGlobalException(Exception exception, WebRequest webRequest) {
+        log.error("An exception occurred due to : {}",exception.getMessage());
         ErrorResponseDto errorResponseDto=new ErrorResponseDto(
                 webRequest.getDescription(false), HttpStatus.INTERNAL_SERVER_ERROR,
                 exception.getMessage(), LocalDateTime.now()
@@ -30,6 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String,String>> handleValidationException(MethodArgumentNotValidException exception) {
+        log.error("An exception occurred due to : {}",exception.getMessage());
         Map<String,String> errors=new HashMap<>();
         List<FieldError> fieldErrorList = exception.getBindingResult().getFieldErrors();
         fieldErrorList.forEach(error -> errors.put(error.getField(),error.getDefaultMessage()));
