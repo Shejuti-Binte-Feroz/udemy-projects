@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CartContext } from "./store/cart-context.jsx";
+import { CartProvider } from "./store/cart-context.jsx";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -35,19 +35,11 @@ const routeDefinitions = createRoutesFromElements(
 
 const appRouter = createBrowserRouter(routeDefinitions);
 
-const initialCartContext={
-  cart: [],
-  setCart: () => {},
-  addToCart: () => {},
-  removeFromCart: () => {},
-  totalQuantity: 0,
-}
-
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <CartContext.Provider value={initialCartContext}>
+    <CartProvider>
       <RouterProvider router={appRouter} />
-    </CartContext.Provider>
+    </CartProvider>
     <ToastContainer
       position="top-center"
       autoClose={3000}

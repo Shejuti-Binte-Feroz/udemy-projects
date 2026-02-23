@@ -1,30 +1,49 @@
 import React from "react";
 import Price from "./Price";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext } from "../store/cart-context.jsx";
 
 export default function ProductCard({ product }) {
+  const { addToCart } = useContext(CartContext);
   return (
-    <Link to={`/products/${product.id}`} state={{ product }}>
     <div className="w-72 rounded-md mx-auto border border-gray-300 dark:border-gray-600 shadow-md overflow-hidden flex flex-col bg-white dark:bg-gray-800 hover:border-primary dark:hover:border-lighter transition">
-      <div className="relative w-full h-72 border-b border-gray-300 dark:border-gray-600">
+
+      <Link to={`/products/${product.id}`} state={{ product }}>
         <img
           src={product.imageUrl}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
+          className="w-full h-48 object-cover transition-transform duration-500 ease-in-out hover:scale-110"
         />
-      </div>
-      <div className="relative h-48 p-4 flex flex-col font-primary">
+      </Link>
+
+      <div className="p-4 flex flex-col flex-grow font-primary">
+
         <h2 className="text-xl font-semibold text-primary mb-2 dark:text-light">
           {product.name}
         </h2>
-        <p className="text-base text-gray-600 dark:text-lighter mb-4">{product.description}</p>
+
+        <p className="text-base text-gray-600 dark:text-lighter mb-4">
+          {product.description}
+        </p>
+
+        {/* Price + Button in Same Row */}
         <div className="flex items-center justify-between mt-auto">
-          <div className="bg-lighter dark:bg-light text-primary font-medium text-sm py-2 px-4 rounded-tl-md">
+
+          <div className="bg-lighter dark:bg-light text-primary font-medium text-sm py-2 px-3 rounded-md">
             <Price currency="$" price={product.price} />
           </div>
+
+          <button
+            className="bg-primary dark:bg-light text-white dark:text-primary text-sm py-2 px-4 rounded-md hover:opacity-90 transition"
+            onClick={addToCart}
+          >
+            Add to Cart
+          </button>
+
         </div>
+
       </div>
     </div>
-    </Link>
   );
 }
