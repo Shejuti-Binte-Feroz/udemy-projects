@@ -36,7 +36,7 @@ export default function ProductCard({ product }) {
 
           <button
             className="bg-primary dark:bg-light text-white dark:text-primary text-sm py-2 px-4 rounded-md hover:opacity-90 transition"
-            onClick={addToCart}
+            onClick={()=>addToCart(product, 1)}
           >
             Add to Cart
           </button>
