@@ -2,10 +2,10 @@ import React from "react";
 import Price from "./Price";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import { CartContext } from "../store/cart-context.jsx";
+import { useCart } from "../store/cart-context.jsx";
 
 export default function ProductCard({ product }) {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
   return (
     <div className="w-72 rounded-md mx-auto border border-gray-300 dark:border-gray-600 shadow-md overflow-hidden flex flex-col bg-white dark:bg-gray-800 hover:border-primary dark:hover:border-lighter transition">
 
@@ -17,7 +17,7 @@ export default function ProductCard({ product }) {
         />
       </Link>
 
-      <div className="p-4 flex flex-col flex-grow font-primary">
+      <div className="p-4 flex flex-col grow font-primary">
 
         <h2 className="text-xl font-semibold text-primary mb-2 dark:text-light">
           {product.name}

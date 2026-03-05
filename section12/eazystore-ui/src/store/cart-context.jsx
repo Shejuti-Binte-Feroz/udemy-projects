@@ -29,12 +29,12 @@ const cartReducer = (prevCart, action) => {
     case ADD_TO_CART:
       const { product, quantity } = action.payload;
       const existingItem = prevCart.find(
-        (item) => item.productId === product.productId
+        (item) => item.id === product.id
       );
 
       if (existingItem) {
         return prevCart.map((item) =>
-          item.productId === product.productId
+          item.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -42,7 +42,7 @@ const cartReducer = (prevCart, action) => {
       return [...prevCart, { ...product, quantity }];
     case REMOVE_FROM_CART:
       return prevCart.filter(
-        (item) => item.productId !== action.payload.productId
+        (item) => item.id !== action.payload.id
       );
     case CLEAR_CART:
       return [];
@@ -86,13 +86,13 @@ export const CartProvider = ({ children }) => {
   // const addToCart = (product, quantity) => {
   //   setCart((prevCart) => {
   //     const existingItem = prevCart.find(
-  //       (item) => item.productId === product.productId
+  //       (item) => item.id === product.id
   //     );
 
   //     if (existingItem) {
   //       // Use map() to create a new array with updated quantity
   //       return prevCart.map((item) =>
-  //         item.productId === product.productId
+  //         item.id === product.id
   //           ? { ...item, quantity: item.quantity + quantity }
   //           : item
   //       );
@@ -104,9 +104,9 @@ export const CartProvider = ({ children }) => {
   // };
 
   // // Function to remove an item from the cart
-  // const removeFromCart = (productId) => {
+  // const removeFromCart = (id) => {
   //   setCart((prevCart) =>
-  //     prevCart.filter((item) => item.productId !== productId)
+  //     prevCart.filter((item) => item.id !== id)
   //   );
   // };
 
@@ -114,8 +114,8 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: ADD_TO_CART, payload: { product, quantity } });
   };
 
-  const removeFromCart = (productId) => {
-    dispatch({ type: REMOVE_FROM_CART, payload: { productId } });
+  const removeFromCart = (id) => {
+    dispatch({ type: REMOVE_FROM_CART, payload: { id } });
   };
 
   const clearCart = () => {
