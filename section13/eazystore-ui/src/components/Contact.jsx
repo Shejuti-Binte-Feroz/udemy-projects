@@ -16,7 +16,6 @@ export default function Contact() {
   useEffect(() => {
     if (actionData?.success) {
       formRef.current?.reset();
-      f;
       toast.success("Your message has been submitted successfully!");
     }
   }, [actionData]);
@@ -29,6 +28,7 @@ export default function Contact() {
 
     if (userConfirmed) {
       const formData = new FormData(formRef.current); // Get form data
+      console.log("Submitting form data:", Object.fromEntries(formData.entries())); // Log form data for debugging
       submit(formData, { method: "post" }); // Proceed with form submission
     } else {
       toast.info("Form submission cancelled.");
@@ -106,7 +106,7 @@ export default function Contact() {
               name="mobileNumber"
               type="tel"
               required
-              pattern="^\d{12}$"
+              pattern="^\d{11}$"
               title="Mobile number must be exactly 12 digits"
               placeholder="Your Mobile Number"
               className={textFieldStyle}
