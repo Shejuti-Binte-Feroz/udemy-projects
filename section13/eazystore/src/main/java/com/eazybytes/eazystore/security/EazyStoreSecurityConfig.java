@@ -45,6 +45,20 @@ public class EazyStoreSecurityConfig {
                 .formLogin(withDefaults())
                 .httpBasic(withDefaults()).build();
     }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        var user1=User.builder().username("shejuti").password("$2a$12$uSC0TfVQK/A/eipzgq6bVO5oJQuYXTGwVw47u5FR3mAHPBNxyhtKu").roles("USER").build();
+        var user2=User.builder().username("admin").password("$2a$12$nIjq9saeZit15MT1uXid1enbv0Tn15aLaSMGcfCl24qqlI4NWc/um").roles("USER","ADMIN").build();
+
+        return new InMemoryUserDetailsManager(Arrays.asList(user1,user2));
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
