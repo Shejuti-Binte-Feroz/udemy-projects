@@ -55,6 +55,15 @@ public class EazyStoreSecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) throws Exception {
+        var daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        var providerManager = new ProviderManager(daoAuthenticationProvider);
+        return providerManager;
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
