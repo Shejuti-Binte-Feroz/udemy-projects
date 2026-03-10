@@ -1,30 +1,33 @@
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import PageTitle from "./PageTitle";
 import {
   Link,
   Form,
   useActionData,
   useNavigation,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 import apiClient from "../api/apiClient";
 import { toast } from "react-toastify";
+import { useAuth } from "../store/auth-context";
 
 export default function Login() {
-
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const navigate = useNavigate();
+  const { loginSuccess } = useAuth();
+  const from = sessionStorage.getItem("redirectPath") || "/home";
 
   useEffect(() => {
     if (actionData?.success) {
-      navigate("/home");
+      loginSuccess(actionData.jwtToken, actionData.user);
+      sessionStorage.removeItem("redirectPath");
+      navigate(from);
     } else if (actionData?.errors) {
-      toast.error(actionData.errors.message || "Login failed. Please try again.");
+      toast.error(actionData.errors.message || "Login failed.");
     }
   }, [actionData]);
-
 
   const labelStyle =
     "block text-lg font-semibold text-primary dark:text-light mb-2";
@@ -65,7 +68,7 @@ export default function Login() {
               placeholder="Your Password"
               autoComplete="current-password"
               required
-              minLength={8}
+              minLength={4}
               maxLength={20}
               className={textFieldStyle}
             />
@@ -119,8 +122,8 @@ export async function loginAction({ request }) {
     }
     throw new Response(
       error.response?.data?.message ||
-      error.message ||
-      "Failed to login. Please try again.",
+        error.message ||
+        "Failed to login. Please try again.",
       { status: error.response?.status || 500 }
     );
   }

@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-  useReducer,
-} from "react";
-
+import { createContext, useEffect, useContext, useReducer } from "react";
 
 // STEP 1
 export const AuthContext = createContext();
@@ -17,50 +10,85 @@ const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGOUT = "LOGOUT";
 
 const authReducer = (prevState, action) => {
-
-}
-
+  switch (action.type) {
+    case LOGIN_SUCCESS:
+      return {
+        ...prevState,
+        jwtToken: action.payload.jwtToken,
+        user: action.payload.user,
+        isAuthenticated: true,
+      };
+    case LOGOUT:
+      return {
+        ...prevState,
+        jwtToken: null,
+        user: null,
+        isAuthenticated: false,
+      };
+    default:
+      return prevState;
+  }
+};
 
 export const AuthProvider = ({ children }) => {
-  const initialCartState = (() => {
+  const initialAuthState = (() => {
     try {
-      const storedCart = localStorage.getItem("cart");
-      return storedCart ? JSON.parse(storedCart) : [];
+      const jwtToken = localStorage.getItem("jwtToken");
+      const user = localStorage.getItem("user");
+      if (jwtToken && user) {
+        return {
+          jwtToken,
+          user: JSON.parse(user),
+          isAuthenticated: true,
+        };
+      }
     } catch (error) {
-      console.error("Failed to parse cart from localStorage:", error);
-      return [];
+      console.error("Failed to load from localStorage:", error);
     }
+    return {
+      jwtToken: null,
+      user: null,
+      isAuthenticated: false,
+    };
   })();
 
-  const [cart, dispatch] = useReducer(cartReducer, initialCartState);
+  const [authState, dispatch] = useReducer(authReducer, initialAuthState);
+
+  // Save cart to localStorage whenever it changes
   useEffect(() => {
     try {
-      localStorage.setItem("cart", JSON.stringify(cart));
+      if (authState.isAuthenticated) {
+        localStorage.setItem("jwtToken", authState.jwtToken);
+        localStorage.setItem("user", JSON.stringify(authState.user));
+      } else {
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("user");
+      }
     } catch (error) {
-      console.error("Failed to save cart to localStorage:", error);
+      console.error("Failed to save to localStorage:", error);
     }
-  }, [cart]);
+  }, [authState]);
 
-  const addToCart = (product, quantity) => {
-    dispatch({ type: ADD_TO_CART, payload: { product, quantity } });
+  // Action creators
+  const loginSuccess = (jwtToken, user) => {
+    dispatch({ type: LOGIN_SUCCESS, payload: { jwtToken, user } });
   };
 
-  const removeFromCart = (id) => {
-    dispatch({ type: REMOVE_FROM_CART, payload: { id } });
+  const logout = () => {
+    dispatch({ type: LOGOUT });
   };
-
-  const clearCart = () => {
-    dispatch({ type: CLEAR_CART });
-  };
-
-  // Calculate total quantity
-  const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart, totalQuantity }}
+    <AuthContext.Provider
+      value={{
+        jwtToken: authState.jwtToken,
+        user: authState.user,
+        isAuthenticated: authState.isAuthenticated,
+        loginSuccess,
+        logout,
+      }}
     >
       {children}
-    </CartContext.Provider>
+    </AuthContext.Provider>
   );
 };
