@@ -20,7 +20,16 @@ export default function Profile() {
   const isSubmitting = navigation.state === "submitting";
   const { logout } = useAuth();
 
-  const [profileData, setProfileData] = useState(initialProfileData);
+  const [profileData, setProfileData] = useState({
+  name: initialProfileData.name || "",
+  email: initialProfileData.email || "",
+  mobileNumber: initialProfileData.mobileNumber || "",
+  street: initialProfileData.street || "",
+  city: initialProfileData.city || "",
+  state: initialProfileData.state || "",
+  postalCode: initialProfileData.postalCode || "",
+  country: initialProfileData.country || "",
+});
 
   useEffect(() => {
     if (actionData?.success) {
@@ -46,10 +55,10 @@ export default function Profile() {
     "w-full px-4 py-2 text-base border rounded-md transition border-primary dark:border-light focus:ring focus:ring-dark dark:focus:ring-lighter focus:outline-none text-gray-800 dark:text-lighter bg-white dark:bg-gray-600 placeholder-gray-400 dark:placeholder-gray-300";
 
   return (
-    <div className="max-w-[1152px] min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
+    <div className="max-w-6xl min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
       <PageTitle title="My Profile" />
 
-      <Form method="PUT" className="space-y-6 max-w-[768px] mx-auto">
+      <Form method="post" className="space-y-6 max-w-3xl mx-auto">
         <div>
           <h2 className={h2Style}>Personal Details</h2>
           <label htmlFor="name" className={labelStyle}>
@@ -109,8 +118,8 @@ export default function Profile() {
               name="mobileNumber"
               type="tel"
               required
-              pattern="^\d{10}$"
-              title="Mobile number must be exactly 10 digits"
+              pattern="^\d{11}$"
+              title="Mobile number must be exactly 11 digits"
               value={profileData.mobileNumber}
               onChange={(e) =>
                 setProfileData((prev) => ({
@@ -235,8 +244,8 @@ export default function Profile() {
               }
               className={textFieldStyle}
               required
-              pattern="^\d{5}$"
-              title="Postal code must be exactly 5 digits"
+              pattern="^\d{4}$"
+              title="Postal code must be exactly 4 digits"
             />
             {actionData?.errors?.postalCode && (
               <p className="text-red-500 text-sm mt-1">
@@ -306,19 +315,26 @@ export async function profileAction({ request }) {
   const data = await request.formData();
 
   const profileData = {
-    name: data.get("name"),
-    email: data.get("email"),
-    mobileNumber: data.get("mobileNumber"),
-    street: data.get("street"),
-    city: data.get("city"),
-    state: data.get("state"),
-    postalCode: data.get("postalCode"),
-    country: data.get("country"),
+    name: (data.get("name") ?? "").trim(),
+    email: (data.get("email") ?? "").trim(),
+    mobileNumber: (data.get("mobileNumber") ?? "").trim(),
+    street: (data.get("street") ?? "").trim(),
+    city: (data.get("city") ?? "").trim(),
+    state: (data.get("state") ?? "").trim(),
+    postalCode: (data.get("postalCode") ?? "").trim(),
+    country: (data.get("country") ?? "").trim(),
   };
+
+  // console.log("Frontend: Sending profile data", profileData);
+
   try {
-    const response = await apiClient.put("/profile", profileData);
+    const response = await apiClient.put("/profile", profileData, {
+      headers: { "Content-Type": "application/json" },
+    });
+    // console.log("Frontend: Response from backend", response.data);
     return { success: true, profileData: response.data };
   } catch (error) {
+    console.error("Frontend: Error from backend", error.response?.data || error);
     if (error.response?.status === 400) {
       return { success: false, errors: error.response?.data };
     }

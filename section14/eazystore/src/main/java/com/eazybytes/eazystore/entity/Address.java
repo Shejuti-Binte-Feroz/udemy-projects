@@ -49,7 +49,4 @@ public class Address extends BaseEntity {
     @Column(name = "country", nullable = false, length = 100)
     private String country;
 
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Address address;
-
 }
