@@ -58,7 +58,7 @@ export default function Profile() {
     <div className="max-w-6xl min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
       <PageTitle title="My Profile" />
 
-      <Form method="post" className="space-y-6 max-w-3xl mx-auto">
+      <Form method="PUT" className="space-y-6 max-w-3xl mx-auto">
         <div>
           <h2 className={h2Style}>Personal Details</h2>
           <label htmlFor="name" className={labelStyle}>

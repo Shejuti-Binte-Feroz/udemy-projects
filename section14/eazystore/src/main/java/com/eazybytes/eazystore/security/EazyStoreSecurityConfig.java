@@ -49,7 +49,8 @@ public class EazyStoreSecurityConfig {
                 .authorizeHttpRequests((requests) -> {
                             publicPaths.forEach(path ->
                                     requests.requestMatchers(path).permitAll());
-                            requests.anyRequest().authenticated();
+                            requests.requestMatchers("api/v1/admin/**").hasAnyAuthority("VIEWORDER", "CONFIRMORDER", "DELETEORDER");
+                            requests.anyRequest().hasAuthority("USER");
                         }
                 )
                 .addFilterBefore(new JWTTokenValidatorFilter(publicPaths), BasicAuthenticationFilter.class)

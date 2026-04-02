@@ -1,5 +1,5 @@
-import React, {use, useEffect} from 'react'
-import { Outlet, Navigate, useLocation} from 'react-router-dom'
+import React, { use, useEffect } from 'react'
+import { Outlet, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../store/auth-context.jsx';
 
 export default function ProtectedRoute() {
@@ -7,10 +7,11 @@ export default function ProtectedRoute() {
     const location = useLocation();
 
     useEffect(() => {
-        if (!isAuthenticated && location.pathname !== "/login") {
+        const skipRedirect = sessionStorage.getItem("skipRedirectPath") === "true";
+        if (!isAuthenticated && location.pathname !== "/login" && !skipRedirect) {
             sessionStorage.setItem("redirectPath", location.pathname);
         }
     }, [isAuthenticated, location.pathname]);
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 }
