@@ -22,12 +22,6 @@ public class Role extends BaseEntity {
     @Column(name = "role_id", nullable = false)
     private Long id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
-
     @Size(max = 50)
     @NotNull
     @Column(name = "name", nullable = false, length = 50)
