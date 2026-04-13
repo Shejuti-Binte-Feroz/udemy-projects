@@ -29,7 +29,7 @@ export default function Header() {
 
   const { totalQuantity } = useCart();
   const { isAuthenticated, user, logout } = useAuth();
-  const isAdmin = user?.roles?.includes("ROlE_ADMIN");
+  const isAdmin = user?.roles?.includes("ROLE_ADMIN");
 
   useEffect(() => {
     if (theme === "dark") {

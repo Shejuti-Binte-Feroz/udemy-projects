@@ -49,9 +49,8 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
                                 .build().parseSignedClaims(jwt).getPayload();
                         String username = String.valueOf(claims.get("email"));
                         String role = String.valueOf(claims.get("role"));
-                        String authority = role.startsWith("ROLE_") ? role : "ROLE_" + role;
                         Authentication authentication = new UsernamePasswordAuthenticationToken(username,
-                                null, AuthorityUtils.commaSeparatedStringToAuthorityList(authority));
+                                null, AuthorityUtils.commaSeparatedStringToAuthorityList(role));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
