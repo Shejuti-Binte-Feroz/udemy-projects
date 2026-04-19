@@ -16,6 +16,5 @@ public class PublicPathConfig {
                 "/api/v1/auth/**",
                 "/error"
         );
-    };
-
+    }
 }
