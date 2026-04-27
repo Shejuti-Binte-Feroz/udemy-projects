@@ -25,7 +25,7 @@ export default function Login() {
       sessionStorage.removeItem("redirectPath");
       setTimeout(() => {
         navigate(from);
-      },100); // Ensure state updates before navigation
+      }, 100);
     } else if (actionData?.errors) {
       toast.error(actionData.errors.message || "Login failed.");
     }

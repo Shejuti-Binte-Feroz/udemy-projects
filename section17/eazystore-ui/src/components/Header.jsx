@@ -17,7 +17,6 @@ export default function Header() {
     return localStorage.getItem("theme") === "dark" ? "dark" : "light";
   });
 
-  
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const [isAdminMenuOpen, setAdminMenuOpen] = useState(false);
   const location = useLocation();
@@ -30,7 +29,6 @@ export default function Header() {
   const { totalQuantity } = useCart();
   const { isAuthenticated, user, logout } = useAuth();
   const isAdmin = user?.roles?.includes("ROLE_ADMIN");
-
   useEffect(() => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
@@ -71,7 +69,7 @@ export default function Header() {
 
   return (
     <header className="border-b border-gray-300 dark:border-gray-600 sticky top-0 z-20 bg-normalbg dark:bg-darkbg">
-      <div className="flex items-center justify-between mx-auto max-w-6xl px-6 py-4">
+      <div className="flex items-center justify-between mx-auto max-w-[1152px] px-6 py-4">
         <Link to="/" className={navLinkClass}>
           <FontAwesomeIcon icon={faTags} className="h-8 w-8" />
           <span className="font-bold">Eazy Stickers</span>
@@ -127,8 +125,8 @@ export default function Header() {
                   >
                     <span className={navLinkClass}>
                       {`Hello ${
-                        user.name.length > 7
-                          ? `${user.name.slice(0, 7)}...`
+                        user.name.length > 5
+                          ? `${user.name.slice(0, 5)}...`
                           : user.name
                       }`}
                     </span>

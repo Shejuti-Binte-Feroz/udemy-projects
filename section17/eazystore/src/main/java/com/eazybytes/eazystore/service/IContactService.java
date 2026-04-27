@@ -6,5 +6,6 @@ import com.eazybytes.eazystore.dto.ProductDto;
 import java.util.List;
 
 public interface IContactService {
+
     boolean saveContact(ContactRequestDto contactRequestDto);
 }

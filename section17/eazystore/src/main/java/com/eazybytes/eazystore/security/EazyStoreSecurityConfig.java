@@ -39,20 +39,16 @@ public class EazyStoreSecurityConfig {
     private final List<String> publicPaths;
 
     @Bean
-    public CompromisedPasswordChecker compromisedPasswordChecker() {
-        return new HaveIBeenPwnedRestApiPasswordChecker();
-    }
-
-    @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
             throws Exception {
-        return http.csrf(csrfConfig -> csrfConfig.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        return http.csrf(csrfConfig -> csrfConfig.
+                        csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
                 .cors(corsConfig -> corsConfig.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((requests) -> {
                             publicPaths.forEach(path ->
                                     requests.requestMatchers(path).permitAll());
-                            requests.requestMatchers("api/v1/admin/**").hasRole("ADMIN");
+                            requests.requestMatchers("/api/v1/admin/**").hasRole("ADMIN");
                             requests.anyRequest().hasAnyRole("USER", "ADMIN");
                         }
                 )
@@ -61,8 +57,10 @@ public class EazyStoreSecurityConfig {
                 .httpBasic(withDefaults()).build();
     }
 
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationProvider authenticationProvider) throws Exception {
+    public AuthenticationManager authenticationManager(
+             AuthenticationProvider authenticationProvider) {
         var providerManager = new ProviderManager(authenticationProvider);
         return providerManager;
     }
@@ -73,9 +71,14 @@ public class EazyStoreSecurityConfig {
     }
 
     @Bean
+    public CompromisedPasswordChecker compromisedPasswordChecker() {
+        return new HaveIBeenPwnedRestApiPasswordChecker();
+    }
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:5220", "http://127.0.0.1:5220"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
         config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowedHeaders(Collections.singletonList("*"));
         config.setAllowCredentials(true);
@@ -85,4 +88,5 @@ public class EazyStoreSecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 }

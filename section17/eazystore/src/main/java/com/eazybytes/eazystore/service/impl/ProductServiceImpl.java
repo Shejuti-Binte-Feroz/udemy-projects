@@ -18,17 +18,15 @@ public class ProductServiceImpl implements IProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<ProductDto> getProducts()
-    {
-        return productRepository.findAll().stream().map(this::transformToDto).collect(Collectors.toList());
+    public List<ProductDto> getProducts() {
+        return productRepository.findAll()
+                .stream().map(this::transformToDTO).collect(Collectors.toList());
     }
 
-    private ProductDto transformToDto(Product product)
-    {
+    private ProductDto transformToDTO(Product product) {
         ProductDto productDto = new ProductDto();
-//        productDto.setId(product.getId());
         BeanUtils.copyProperties(product, productDto);
-//        throw new RuntimeException("Not Implemented");
+        productDto.setProductId(product.getId());
         return productDto;
     }
 }

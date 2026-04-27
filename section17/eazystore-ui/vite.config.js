@@ -5,8 +5,4 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    host: "localhost", // force IPv4 to avoid EACCES issues on Windows
-    port: 5220,        // default Vite port; change if needed
-  },
 });

@@ -18,18 +18,9 @@ export default function Profile() {
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isSubmitting = navigation.state === "submitting";
-  const { logout } = useAuth();
+  const { loginSuccess, logout } = useAuth();
 
-  const [profileData, setProfileData] = useState({
-  name: initialProfileData.name || "",
-  email: initialProfileData.email || "",
-  mobileNumber: initialProfileData.mobileNumber || "",
-  street: initialProfileData.street || "",
-  city: initialProfileData.city || "",
-  state: initialProfileData.state || "",
-  postalCode: initialProfileData.postalCode || "",
-  country: initialProfileData.country || "",
-});
+  const [profileData, setProfileData] = useState(initialProfileData);
 
   useEffect(() => {
     if (actionData?.success) {
@@ -43,6 +34,15 @@ export default function Profile() {
       } else {
         toast.success("Your Profile details are saved successfully!");
         setProfileData(actionData.profileData);
+        // Update the user object in auth context and localStorage
+        if (actionData.profileData) {
+          const updatedUser = {
+            ...profileData, // previous
+            ...actionData.profileData, // updated fields
+          };
+          // Update in context
+          loginSuccess(localStorage.getItem("jwtToken"), updatedUser);
+        }
       }
     }
   }, [actionData]);
@@ -55,10 +55,10 @@ export default function Profile() {
     "w-full px-4 py-2 text-base border rounded-md transition border-primary dark:border-light focus:ring focus:ring-dark dark:focus:ring-lighter focus:outline-none text-gray-800 dark:text-lighter bg-white dark:bg-gray-600 placeholder-gray-400 dark:placeholder-gray-300";
 
   return (
-    <div className="max-w-6xl min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
+    <div className="max-w-[1152px] min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
       <PageTitle title="My Profile" />
 
-      <Form method="PUT" className="space-y-6 max-w-3xl mx-auto">
+      <Form method="PUT" className="space-y-6 max-w-[768px] mx-auto">
         <div>
           <h2 className={h2Style}>Personal Details</h2>
           <label htmlFor="name" className={labelStyle}>
@@ -118,8 +118,8 @@ export default function Profile() {
               name="mobileNumber"
               type="tel"
               required
-              pattern="^\d{11}$"
-              title="Mobile number must be exactly 11 digits"
+              pattern="^\d{10}$"
+              title="Mobile number must be exactly 10 digits"
               value={profileData.mobileNumber}
               onChange={(e) =>
                 setProfileData((prev) => ({
@@ -148,11 +148,14 @@ export default function Profile() {
             name="street"
             type="text"
             placeholder="Street details"
-            value={profileData.street}
+            value={profileData.address?.street}
             onChange={(e) =>
               setProfileData((prev) => ({
                 ...prev,
-                street: e.target.value,
+                address: {
+                  ...prev.address,
+                  street: e.target.value,
+                },
               }))
             }
             className={textFieldStyle}
@@ -177,11 +180,14 @@ export default function Profile() {
               name="city"
               type="text"
               placeholder="Your City"
-              value={profileData.city}
+              value={profileData.address?.city}
               onChange={(e) =>
                 setProfileData((prev) => ({
                   ...prev,
-                  city: e.target.value,
+                  address: {
+                    ...prev.address,
+                    city: e.target.value,
+                  },
                 }))
               }
               className={textFieldStyle}
@@ -208,11 +214,14 @@ export default function Profile() {
               minLength={2}
               maxLength={30}
               placeholder="Your State"
-              value={profileData.state}
+              value={profileData.address?.state}
               onChange={(e) =>
                 setProfileData((prev) => ({
                   ...prev,
-                  state: e.target.value,
+                  address: {
+                    ...prev.address,
+                    state: e.target.value,
+                  },
                 }))
               }
               className={textFieldStyle}
@@ -235,17 +244,20 @@ export default function Profile() {
               name="postalCode"
               type="text"
               placeholder="Your Postal Code"
-              value={profileData.postalCode}
+              value={profileData.address?.postalCode}
               onChange={(e) =>
                 setProfileData((prev) => ({
                   ...prev,
-                  postalCode: e.target.value,
+                  address: {
+                    ...prev.address,
+                    postalCode: e.target.value,
+                  },
                 }))
               }
               className={textFieldStyle}
               required
-              pattern="^\d{4}$"
-              title="Postal code must be exactly 4 digits"
+              pattern="^\d{5}$"
+              title="Postal code must be exactly 5 digits"
             />
             {actionData?.errors?.postalCode && (
               <p className="text-red-500 text-sm mt-1">
@@ -263,14 +275,17 @@ export default function Profile() {
               name="country"
               type="text"
               required
-              minLength={3}
-              maxLength={30}
+              minLength={2}
+              maxLength={2}
               placeholder="Your Country"
-              value={profileData.country}
+              value={profileData.address?.country}
               onChange={(e) =>
                 setProfileData((prev) => ({
                   ...prev,
-                  country: e.target.value,
+                  address: {
+                    ...prev.address,
+                    country: e.target.value,
+                  },
                 }))
               }
               className={textFieldStyle}
@@ -315,26 +330,19 @@ export async function profileAction({ request }) {
   const data = await request.formData();
 
   const profileData = {
-    name: (data.get("name") ?? "").trim(),
-    email: (data.get("email") ?? "").trim(),
-    mobileNumber: (data.get("mobileNumber") ?? "").trim(),
-    street: (data.get("street") ?? "").trim(),
-    city: (data.get("city") ?? "").trim(),
-    state: (data.get("state") ?? "").trim(),
-    postalCode: (data.get("postalCode") ?? "").trim(),
-    country: (data.get("country") ?? "").trim(),
+    name: data.get("name"),
+    email: data.get("email"),
+    mobileNumber: data.get("mobileNumber"),
+    street: data.get("street"),
+    city: data.get("city"),
+    state: data.get("state"),
+    postalCode: data.get("postalCode"),
+    country: data.get("country"),
   };
-
-  // console.log("Frontend: Sending profile data", profileData);
-
   try {
-    const response = await apiClient.put("/profile", profileData, {
-      headers: { "Content-Type": "application/json" },
-    });
-    // console.log("Frontend: Response from backend", response.data);
+    const response = await apiClient.put("/profile", profileData);
     return { success: true, profileData: response.data };
   } catch (error) {
-    console.error("Frontend: Error from backend", error.response?.data || error);
     if (error.response?.status === 400) {
       return { success: false, errors: error.response?.data };
     }

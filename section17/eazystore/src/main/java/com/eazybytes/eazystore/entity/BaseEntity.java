@@ -26,16 +26,16 @@ public class BaseEntity {
     @CreationTimestamp
     private Instant createdAt;
 
-    @Column(name = "created_by", nullable = false, length = 100, updatable = false)
     @CreatedBy
+    @Column(name = "created_by", nullable = false, length = 20, updatable = false)
     private String createdBy;
 
-    @Column(name = "updated_at", insertable = false)
     @LastModifiedDate
     @UpdateTimestamp
+    @Column(name = "updated_at", insertable = false)
     private Instant updatedAt;
 
-    @Column(name = "updated_by", length = 100,insertable = false)
+    @Column(name = "updated_by", length = 20, insertable = false)
     @LastModifiedBy
     private String updatedBy;
 }

@@ -23,12 +23,11 @@ export default function Contact() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const userConfirmed = window.confirm(
-      "Are you sure you want to submit the form?",
+      "Are you sure you want to submit the form?"
     );
 
     if (userConfirmed) {
       const formData = new FormData(formRef.current); // Get form data
-      console.log("Submitting form data:", Object.fromEntries(formData.entries())); // Log form data for debugging
       submit(formData, { method: "post" }); // Proceed with form submission
     } else {
       toast.info("Form submission cancelled.");
@@ -40,11 +39,11 @@ export default function Contact() {
   const textFieldStyle =
     "w-full px-4 py-2 text-base border rounded-md transition border-primary dark:border-light focus:ring focus:ring-dark dark:focus:ring-lighter focus:outline-none text-gray-800 dark:text-lighter bg-white dark:bg-gray-600 placeholder-gray-400 dark:placeholder-gray-300";
   return (
-    <div className="max-w-6xl min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
+    <div className="max-w-[1152px] min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
       {/* Page Title */}
       <PageTitle title="Contact Us" />
       {/* Contact Info */}
-      <p className="max-w-3xl mx-auto mt-8 text-gray-600 dark:text-lighter mb-8 text-center">
+      <p className="max-w-[768px] mx-auto mt-8 text-gray-600 dark:text-lighter mb-8 text-center">
         We’d love to hear from you! If you have any questions, feedback, or
         suggestions, please don’t hesitate to reach out.
       </p>
@@ -54,7 +53,7 @@ export default function Contact() {
         method="POST"
         ref={formRef}
         onSubmit={handleSubmit}
-        className="space-y-6 max-w-3xl mx-auto"
+        className="space-y-6 max-w-[768px] mx-auto"
       >
         {/* Name Field */}
         <div>
@@ -72,7 +71,9 @@ export default function Contact() {
             maxLength={30}
           />
           {actionData?.errors?.name && (
-            <p className="text-red-500 text-sm mt-1">{actionData.errors.name}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {actionData.errors.name}
+            </p>
           )}
         </div>
 
@@ -92,8 +93,10 @@ export default function Contact() {
               required
             />
             {actionData?.errors?.email && (
-            <p className="text-red-500 text-sm mt-1">{actionData.errors.email}</p>
-          )}
+              <p className="text-red-500 text-sm mt-1">
+                {actionData.errors.email}
+              </p>
+            )}
           </div>
 
           {/* Mobile Field */}
@@ -106,14 +109,16 @@ export default function Contact() {
               name="mobileNumber"
               type="tel"
               required
-              pattern="^\d{11}$"
-              title="Mobile number must be exactly 12 digits"
+              pattern="^\d{10}$"
+              title="Mobile number must be exactly 10 digits"
               placeholder="Your Mobile Number"
               className={textFieldStyle}
             />
             {actionData?.errors?.mobileNumber && (
-            <p className="text-red-500 text-sm mt-1">{actionData.errors.mobileNumber}</p>
-          )}
+              <p className="text-red-500 text-sm mt-1">
+                {actionData.errors.mobileNumber}
+              </p>
+            )}
           </div>
         </div>
 
@@ -133,7 +138,9 @@ export default function Contact() {
             maxLength={500}
           ></textarea>
           {actionData?.errors?.message && (
-            <p className="text-red-500 text-sm mt-1">{actionData.errors.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {actionData.errors.message}
+            </p>
           )}
         </div>
 
@@ -167,13 +174,13 @@ export async function contactAction({ request, params }) {
     // return redirect("/home");
   } catch (error) {
     if (error.response?.status === 400) {
-      return { success: false, error: error.response.data.errorMessage || "Invalid input. Please check your data and try again." }; 
+      return { success: false, errors: error.response?.data };
     }
     throw new Response(
       error.response?.data?.errorMessage ||
         error.message ||
         "Failed to submit your message. Please try again.",
-      { status: error.status || 500 },
+      { status: error.status || 500 }
     );
   }
 }

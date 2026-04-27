@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-  useReducer,
-} from "react";
-
+import { createContext, useEffect, useContext, useReducer } from "react";
 
 // STEP 1
 export const CartContext = createContext();
@@ -21,12 +14,12 @@ const cartReducer = (prevCart, action) => {
     case ADD_TO_CART:
       const { product, quantity } = action.payload;
       const existingItem = prevCart.find(
-        (item) => item.id === product.id
+        (item) => item.productId === product.productId
       );
 
       if (existingItem) {
         return prevCart.map((item) =>
-          item.id === product.id
+          item.productId === product.productId
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -34,7 +27,7 @@ const cartReducer = (prevCart, action) => {
       return [...prevCart, { ...product, quantity }];
     case REMOVE_FROM_CART:
       return prevCart.filter(
-        (item) => item.id !== action.payload.id
+        (item) => item.productId !== action.payload.productId
       );
     case CLEAR_CART:
       return [];
@@ -55,16 +48,6 @@ export const CartProvider = ({ children }) => {
   })();
 
   const [cart, dispatch] = useReducer(cartReducer, initialCartState);
-  // Initialize cart state from localStorage or as an empty array
-  // const [cart, setCart] = useState(() => {
-  //   try {
-  //     const storedCart = localStorage.getItem("cart");
-  //     return storedCart ? JSON.parse(storedCart) : [];
-  //   } catch (error) {
-  //     console.error("Failed to parse cart from localStorage:", error);
-  //     return [];
-  //   }
-  // });
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
@@ -75,39 +58,12 @@ export const CartProvider = ({ children }) => {
     }
   }, [cart]);
 
-  // const addToCart = (product, quantity) => {
-  //   setCart((prevCart) => {
-  //     const existingItem = prevCart.find(
-  //       (item) => item.id === product.id
-  //     );
-
-  //     if (existingItem) {
-  //       // Use map() to create a new array with updated quantity
-  //       return prevCart.map((item) =>
-  //         item.id === product.id
-  //           ? { ...item, quantity: item.quantity + quantity }
-  //           : item
-  //       );
-  //     }
-
-  //     // If the product is not in the cart, add it
-  //     return [...prevCart, { ...product, quantity }];
-  //   });
-  // };
-
-  // // Function to remove an item from the cart
-  // const removeFromCart = (id) => {
-  //   setCart((prevCart) =>
-  //     prevCart.filter((item) => item.id !== id)
-  //   );
-  // };
-
   const addToCart = (product, quantity) => {
     dispatch({ type: ADD_TO_CART, payload: { product, quantity } });
   };
 
-  const removeFromCart = (id) => {
-    dispatch({ type: REMOVE_FROM_CART, payload: { id } });
+  const removeFromCart = (productId) => {
+    dispatch({ type: REMOVE_FROM_CART, payload: { productId } });
   };
 
   const clearCart = () => {
@@ -117,9 +73,22 @@ export const CartProvider = ({ children }) => {
   // Calculate total quantity
   const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
 
+  // Calculate total price
+  const totalPrice = cart.reduce(
+    (acc, item) => acc + item.quantity * item.price,
+    0
+  );
+
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart, totalQuantity }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        totalQuantity,
+        totalPrice,
+      }}
     >
       {children}
     </CartContext.Provider>

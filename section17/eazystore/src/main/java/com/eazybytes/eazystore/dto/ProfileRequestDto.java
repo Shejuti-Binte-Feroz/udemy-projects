@@ -19,7 +19,7 @@ public class ProfileRequestDto {
     private String email;
 
     @NotBlank(message = "Mobile Number cannot be empty")
-    @Pattern(regexp = "^\\d{11}$", message = "Mobile number must be 11 digits")
+    @Pattern(regexp = "^\\d{10}$", message = "Mobile number must be 10 digits")
     private String mobileNumber;
 
     @NotBlank(message = "Street is required")
@@ -35,11 +35,11 @@ public class ProfileRequestDto {
     private String state;
 
     @NotBlank(message = "Postal Code is required")
-    @Pattern(regexp = "^\\d{4}$", message = "Postal code must be exactly 4 digits")
+    @Pattern(regexp = "^\\d{5}$", message = "Postal code must be exactly 5 digits")
     private String postalCode;
 
     @NotBlank(message = "Country is required")
-    @Size(min = 3, max = 30, message = "The length of the country should be between 3 and 30 characters")
+    @Size(min = 2, max = 2, message = "The length of the country should be exactly 2 characters")
     private String country;
 
 }

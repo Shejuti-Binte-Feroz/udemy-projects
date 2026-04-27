@@ -21,8 +21,8 @@ public class JwtUtil {
 
     private final Environment env;
 
-    public String generateJwtToken(Authentication authentication) {
-        String jwt= "";
+    public String generateJwtToken(Authentication authentication){
+        String jwt = "";
         String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,
                 ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
         SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
@@ -32,11 +32,10 @@ public class JwtUtil {
                 .claim("email", fetchedCustomer.getEmail())
                 .claim("mobileNumber", fetchedCustomer.getMobileNumber())
                 .claim("roles", authentication.getAuthorities().stream().map(
-                        GrantedAuthority::getAuthority).collect(Collectors.joining(","))
-                )
+                        GrantedAuthority::getAuthority).collect(Collectors.joining(",")))
                 .issuedAt(new java.util.Date())
-                .expiration(new java.util.Date((new java.util.Date()).getTime() + 60 * 60 * 1000))
+                .expiration(new java.util.Date((new java.util.Date()).getTime() + 24 * 60 * 60 * 1000))
                 .signWith(secretKey).compact();
-        return  jwt;
+        return jwt;
     }
 }

@@ -11,8 +11,12 @@ export default function Footer() {
         aria-hidden="true"
       />
       by
-      <a href="https://eazybytes.com/" target="_blank" rel="noreferrer"
-        className="text-primary dark:text-light font-semibold px-1 transition-colors duration-300 hover:text-dark dark:hover:text-lighter">
+      <a
+        href="https://eazybytes.com/"
+        target="_blank"
+        rel="noreferrer"
+        className="text-primary dark:text-light font-semibold px-1 transition-colors duration-300 hover:text-dark dark:hover:text-lighter"
+      >
         eazybytes
       </a>
     </footer>

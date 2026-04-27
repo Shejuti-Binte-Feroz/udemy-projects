@@ -31,14 +31,18 @@ public class EazyStoreUsernamePwdAuthenticationProvider implements Authenticatio
         String username = authentication.getName();
         String pwd = authentication.getCredentials().toString();
         Customer customer = customerRepository.findByEmail(username).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with username: " + username)
+                () -> new UsernameNotFoundException(
+                        "User details not found for the user: " + username)
         );
         Set<Role> roles = customer.getRoles();
-        List<SimpleGrantedAuthority> grantedAuthorities = roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
-        if(passwordEncoder.matches(pwd, customer.getPasswordHash())){
-            return new UsernamePasswordAuthenticationToken(customer, null, grantedAuthorities);
+        List<SimpleGrantedAuthority> authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .toList();
+        if(passwordEncoder.matches(pwd, customer.getPasswordHash())) {
+            return new UsernamePasswordAuthenticationToken(customer,null,
+                    authorities);
         } else {
-            throw new BadCredentialsException("Invalid password");
+            throw new BadCredentialsException("Invalid password!");
         }
     }
 

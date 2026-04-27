@@ -2,6 +2,7 @@ package com.eazybytes.eazystore.filter;
 
 import com.eazybytes.eazystore.constants.ApplicationConstants;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
@@ -32,7 +33,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
+            HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String authHeader = request.getHeader(ApplicationConstants.JWT_HEADER);
         if (null != authHeader) {
@@ -48,14 +49,19 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
                         Claims claims = Jwts.parser().verifyWith(secretKey)
                                 .build().parseSignedClaims(jwt).getPayload();
                         String username = String.valueOf(claims.get("email"));
-                        String role = String.valueOf(claims.get("roles"));
+                        String roles = String.valueOf(claims.get("roles"));
                         Authentication authentication = new UsernamePasswordAuthenticationToken(username,
-                                null, AuthorityUtils.commaSeparatedStringToAuthorityList(role));
+                                null, AuthorityUtils.commaSeparatedStringToAuthorityList(roles));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
 
-            } catch (Exception exception) {
+            }catch (ExpiredJwtException exception) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token Expired");
+                return;
+            }
+            catch (Exception exception) {
                 throw new BadCredentialsException("Invalid Token received!");
             }
         }
