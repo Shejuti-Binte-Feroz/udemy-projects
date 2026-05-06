@@ -36,7 +36,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import OrderSuccess from "./components/OrderSuccess.jsx";
 
 const stripePromise = loadStripe(
-  "pk_test_51RJQvF4PbYqEP0SGCcnUiXIBFtwmjlfv7CvYdwgLRyrs3pLxejSAYED3goAAkxwKVkgP70GvS0LkzhIHWSfpHWYE00jR1SrCza"
+  "pk_test_51TOIvS3Pg4opjuhhWpmvFH8hDBvplcl0CUylFjsBe5Ou50f3fA5BY7qChOwBdTByIj1cJhVgoxRJJId611etxqev00XrkL9oP6",
 );
 
 const routeDefinitions = createRoutesFromElements(
@@ -65,7 +65,7 @@ const routeDefinitions = createRoutesFromElements(
       <Route path="/admin/orders" element={<AdminOrders />} />
       <Route path="/admin/messages" element={<Messages />} />
     </Route>
-  </Route>
+  </Route>,
 );
 
 const appRouter = createBrowserRouter(routeDefinitions);
@@ -89,5 +89,5 @@ createRoot(document.getElementById("root")).render(
         transition={Bounce}
       />
     </Elements>
-  </StrictMode>
+  </StrictMode>,
 );
